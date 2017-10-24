@@ -1,0 +1,81 @@
+---
+output: word_document
+---
+#install.packages("rmarkdown")
+#library("rmarkdown")
+
+READING CREDSCO.CSV. NOTE: Change the path of the file for the proper one in your computer. 
+
+Remember that subfolders must be indicated by "/" and not by "\"
+
+```{r}
+dd <- read.table("D:/karina/docencia/areferenciesPPT/DadesPractiques/CREDSCO/credsco.csv",header=T, sep=";", dec=",")
+```
+
+Set the folder where the word file is going to be generated
+```{r}
+setwd("D:/karina/docencia/areferenciesPPT/7a.DescriptivaBasica/practicaR/outputs/prova")
+```  
+
+Check the type of the R object created for the dataset
+
+```{r}            
+class(dd)
+```
+
+i sense incloure la instruccio r en el document final seria 
+
+```{r, echo=FALSE}            
+class(dd)
+```
+
+Get dimensions of the dataset
+````{r}
+dim(dd)
+n<-dim(dd)[1]
+K<-dim(dd)[2]
+
+n
+K
+```
+Check the variables 
+
+```{r}
+names(dd)
+```
+
+
+Basic descriptive analysis for numerical variables
+```{r, echo=FALSE}
+listOfColors<-rainbow(39)
+
+par(ask=TRUE)
+
+for(k in 1:K){
+  print(paste("variable ", k, ":", names(dd)[k] ))
+  if (!is.numeric(dd[,k])){ 
+    frecs<-table(as.dactor(dd[,k]), useNA="ifany")
+    proportions<-frecs/n
+    #ojo, decidir si calcular porcentages con o sin missing values
+    pie(frecs, cex=0.6, main=paste("Pie of", names(dd)[k]))
+    barplot(frecs, las=3, cex.names=0.7, main=paste("Barplot of", names(dd)[k]), col=listOfColors)
+    print(paste("Number of modalities: ", length(frecs)))
+    print("Frequency table")
+    print(frecs)
+    print("Relative frequency table (proportions)")
+    print(proportions)
+    print("Frequency table sorted")
+    print(sort(frecs, decreasing=TRUE))
+    print("Relative frequency table (proportions) sorted")
+    print(sort(proportions, decreasing=TRUE))
+   }else{
+    hist(dd[,k], main=paste("Histogram of", names(dd)[k]))
+    boxplot(dd[,k], horizontal=TRUE, main=paste("Boxplot of", names(dd)[k]))
+    print("Extended Summary Statistics")
+    print(summary(dd[,k]))
+    print(paste("sd: ", sd(dd[,k], na.rm=TRUE)))
+    print(paste("vc: ", sd(dd[,k], na.rm=TRUE)/mean(dd[,k], na.rm=TRUE)))
+   }
+}
+par(ask=FALSE)
+```

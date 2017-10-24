@@ -1,6 +1,4 @@
-#  READING CREDSCO_BIN
-# load("d:/karina/docencia/sreferenciesppt/16.AssociatiusVisualitzacio/MultivariateAnalysis/PracticaR/credscok_bin")
-
+#  READING THE DATA
 pokemon <- read.table("./Datasets/pokemonProcessed.csv", header=T, sep = ",")
 
 
@@ -142,14 +140,14 @@ axis(side=4, pos= 0, labels = F, col="cyan")
 
 #nominal qualitative variables
 
-dcat<-c(1,3,6:7)
+dcat<-c(1,10,11,12)
 #divide categoricals in several graphs if joint representation saturates
 
 #build a palette with as much colors as qualitative variables 
 
-colors<-c("blue","red","green","orange","darkgreen")
+#colors<-c("blue","red","green","orange","darkgreen")
 #alternative
-#colors<-rainbow(length(dcat))
+colors<-rainbow(length(dcat))
 
 c<-1
 for(k in dcat){
@@ -199,7 +197,7 @@ for(k in dcat){
 legend("bottomleft",names(pokemon)[dcat],pch=1,col=colors, cex=0.6)
 
 
-#apokemon ordinal qualitative variables. Ensure ordering is the correct
+#add ordinal qualitative variables. Ensure ordering is the correct
 
 dordi<-c(8)
 
