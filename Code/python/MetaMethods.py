@@ -125,7 +125,7 @@ for nest in [1, 2, 5, 10, 20, 50, 100, 200]:
     scores = cross_val_score(AdaBoostClassifier(n_estimators=nest), X, y, cv=cv, scoring='accuracy')
     print("Accuracy: %0.3f [%s" % (scores.mean(), nest), ' trees]')
 
-# The same restricting the max deph of the trees. 
+# The same restricting the max deph of the trees.
 for nest in [1, 2, 5, 10, 20, 50, 100, 200]:
     scores = cross_val_score(AdaBoostClassifier(DecisionTreeClassifier(max_depth=5), n_estimators=nest), X, y, cv=cv,
                              scoring='accuracy')
