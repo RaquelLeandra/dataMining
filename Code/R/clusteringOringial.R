@@ -1,7 +1,6 @@
 #Retrieve the data saved AFTER the profiling practice...... this means data already cleaned
 
-
-dd <- read.csv("./Datasets/pokemonProcessed.csv", header=T, sep = ",");
+dd <- read.csv("Data/credscoClean.csv", sep=";");
 names(dd)
 dim(dd)
 summary(dd)
@@ -11,7 +10,7 @@ attach(dd)
 #set a list of numerical variables
 names(dd)
 
-dcon <- data.frame (Total,Sp_Atk,Sp_Def,Speed,Attack,Defense,HP, Catch_Rate)
+dcon <- data.frame (Antiguedad.Trabajo,Plazo,Edad,Gastos,Ingresos,Patrimonio,Cargas.patrimoniales,Importe.solicitado,Precio.del.bien.financiado,Estalvi, RatiFin)
 dim(dcon)
 
 #
@@ -51,6 +50,8 @@ Ib1
 # LETS REPEAT THE KMEANS RUN WITH K=5
 
 k2 <- kmeans(dcon,5)
+
+
 k2$size
 
 Bss <- sum(rowSums(k2$centers^2)*k2$size)
@@ -77,6 +78,9 @@ k3 <- kmeans(dcon,8)
 k3$size
 
 Bss <- sum(rowSums(k3$centers^2)*k3$size)
+
+
+
 Wss <- sum(k3$withinss)
 
 Ib3 <- 100*Bss/(Bss+Wss)
@@ -85,7 +89,7 @@ Ib3
 
 # HIERARCHICAL CLUSTERING
 
-d  <- dist(dcon)
+d  <- dist(dcon[1:50,])
 h1 <- hclust(d,method="ward.D")  # NOTICE THE COST
 plot(h1)
 
@@ -97,7 +101,7 @@ plot(h1)
 
 # WHERE ARE THER THE LEAPS? WHERE WILL YOU CUT THE DENDREOGRAM?, HOW MANY CLASSES WILL YOU OBTAIN?
 
-nc = 4
+nc = 3
 
 c1 <- cutree(h1,nc)
 
@@ -123,12 +127,21 @@ plot(cdg[,1], cdg[,7])
 # LETS SEE THE PARTITION VISUALLY
 
 
-plot(Total, Catch_Rate,col=c1,main="Clustering of credit data in 4 classes")
-legend("topright",c("class1","class2","class3", "class4"),pch=1,col=c(1:4))
+plot(Edad,Estalvi,col=c1,main="Clustering of credit data in 3 classes")
+legend("topright",c("class1","class2","class3"),pch=1,col=c(1:3))
 
 
 
+plot(RatiFin,Estalvi)
+plot(RatiFin,Estalvi,col=c1,main="Clustering of credit data in 3 classes")
+legend("topright",c("class1","class2","class3"),pch=1,col=c(1:3), cex=0.6)
 
+plot(Antiguedad.Trabajo,Estalvi,col=c1,main="Clustering of credit data in 3 classes")
+legend("topright",c("class1","class2","class3"),pch=1,col=c(1:3), cex=0.6)
+plot(Patrimonio, Ingresos,col=c1,main="Clustering of credit data in 3 classes")
+legend("topright",c("class1","class2","class3"),pch=1,col=c(1:3), cex=0.6)
+plot(Patrimonio, Antiguedad.Trabajo,col=c1,main="Clustering of credit data in 3 classes")
+legend("topright",c("class1","class2","class3"),pch=1,col=c(1:3), cex=0.6)
 
 pairs(dcon[,1:7], col=c1)
 
@@ -173,18 +186,27 @@ table(c1,c2)
 
 names(dd)
 #ratiFin
-boxplot(Total~c2, horizontal=TRUE)
+boxplot(dd[,16]~c2, horizontal=TRUE)
 
 #plazo
-boxplot(Catch_Rate~c2, horizontal=TRUE)
+boxplot(dd[,4]~c2, horizontal=TRUE)
 
 #gastos
 boxplot(dd[,9]~c2, horizontal=TRUE)
 
-names <- c("isLegendary","Total", "Catch_Rate")
-pairs(dd[,names], col=c2)
+pairs(dcon[,1:7], col=c2)
+
+plot(RatiFin,Estalvi,col=c2,main="Clustering of credit data in 3 classes")
+legend("topright",levels(c2),pch=1,col=c(1:4), cex=0.6)
 
 cdg <- aggregate(as.data.frame(dcon),list(c2),mean)
 cdg
+
+plot(Edad, Gastos, col= c2)
+points(cdg[,4],cdg[,5],pch=16,col="orange")
+text(cdg[,4],cdg[,5], labels=cdg[,1], pos=2, font=2, cex=0.7, col="orange")
+
+potencials<-c(3,4,6,7,10,11)
+pairs(dcon[,potencials],col=c2)
 
 #Profiling plots

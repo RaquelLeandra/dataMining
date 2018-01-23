@@ -4,3 +4,7 @@
 .Ruserdata
 
 dataMining\.Rproj
+
+Data/
+
+Code/python/jupyter/\.ipynb_checkpoints/
